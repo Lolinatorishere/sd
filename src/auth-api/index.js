@@ -17,6 +17,17 @@ app.get('/', async (req, res) => {
     }
 });
 
+app.get('/users', async (req, res) => {
+    try {
+        const users = await knex.select('username').from('users');
+        res.json(users);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error retrieving data');
+    }
+});
+
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
