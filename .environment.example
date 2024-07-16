@@ -1,3 +1,4 @@
+# to create the env file call this file .env
 # General
 USE_DEV_MODE=true           #if true, it will allow auto-reload when changes are done to the src files
 

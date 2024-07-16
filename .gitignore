@@ -51,5 +51,6 @@ Thumbs.db
 /.idea
 /src/importer/_build/
 
-# Environment Files that may contain Sensitive files
+# Sensitive files
 *.env
+/src/auth-api/.jwt_key.js
