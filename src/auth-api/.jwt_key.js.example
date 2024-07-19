@@ -1,5 +1,8 @@
 //This file should contain the secret key used for creating the the jwt token verification 
+//
+//IMPORTANT!!:
 //You should add "current_dir"/.jwt_key.js to your gitignore file to avoid exposing the key to the repository
+//
 module.exports = {
     key: `secret key here`
 }

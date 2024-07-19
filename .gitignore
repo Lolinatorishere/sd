@@ -54,3 +54,4 @@ Thumbs.db
 # Sensitive files
 *.env
 /src/auth-api/.jwt_key.js
+/src/auth-api/.aes_password.js
