@@ -8,8 +8,7 @@ const sha256 = require('js-sha256');
 
 //if .jwt.js has not been created will error out
 const jwt_key = require('./.jwt_key.js').key;
-const knexConfig = require('./knexfile').db;
-const knex = require('knex')(knexConfig);
+const knex = require('./knex.js');
 
 const cors = require('cors');
 const app = express();
@@ -18,30 +17,6 @@ app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
-async function create_base_tables() {
-    knex.schema.hasTable('users').then(function (exists) {
-        if (!exists) {
-            return knex.schema.createTable('users', function (t) {
-                t.uuid('id').defaultTo(knex.fn.uuid());
-                t.string("username", 100).unique();
-                t.specificType("password", "CHAR(64)");
-            })
-        }
-    })
-
-    knex.schema.hasTable('user_perms').then(function (exists) {
-        if (!exists) {
-            return knex.schema.createTable('user_perms', function (t) {
-                t.uuid('user_id');
-                t.integer("user_permission_level").unsigned;
-                t
-                    .foreign('user_id')
-                    .references('users.id')
-                    .deferrable('deferred')
-            });
-        }
-    })
-}
 
 async function check_root() {
 
@@ -79,6 +54,7 @@ async function check_root() {
         return;
     }
 }
+
 
 //returns true or false depending on if the credentials are valid or not for that user
 //does not processes the inputs for validation thats presumably done outside

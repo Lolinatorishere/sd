@@ -2,16 +2,16 @@ module.exports = {
     db: {
         client: 'pg',
         connection: {
-            host: 'auth-db',
+            host: 'bl-bd',
             user: 'sd',
             password: 'sd',
-            database: 'auth-db'
+            database: 'sd'
         },
         migrations: {
             directory: './migrations'
         },
         seeds: {
-            directory: './seeds'
+
         }
     }
 };

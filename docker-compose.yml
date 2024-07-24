@@ -32,7 +32,7 @@ services:
     volumes:
       - bl_data:/var/lib/postgresql/data/
     ports:
-      - "$BL_DB_PORT:5432"
+      - "$BL_DB_PORT:5434"
     networks:
       - bl
 
