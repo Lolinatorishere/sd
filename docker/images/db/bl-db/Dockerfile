@@ -6,4 +6,4 @@ ENV POSTGRES_DB=bl-db
 
 COPY bl-db_schema.sql /docker-entrypoint-initdb.d/
 
-EXPOSE 5434
+EXPOSE 5432

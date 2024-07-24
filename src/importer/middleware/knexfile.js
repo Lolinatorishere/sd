@@ -2,10 +2,10 @@ module.exports = {
     db: {
         client: 'pg',
         connection: {
-            host: 'bl-bd',
+            host: 'bl-db',
             user: 'sd',
             password: 'sd',
-            database: 'sd'
+            database: 'bl-db'
         },
         migrations: {
             directory: './migrations'
