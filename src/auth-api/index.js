@@ -103,6 +103,26 @@ async function validateCredentials(username, password) {
 
 //check_root();
 
+app.get('/users/', cookieJwtAuth, async (req, res) => {
+    try {
+        if (!req.user) {
+            return res.status(401).send("Invalid Request, please log in");
+        }
+
+        let users = await knex("users")
+            .select("username", "id")
+            .then((response) => {
+                return response;
+            })
+
+        return res.send(users);
+
+    } catch (error) {
+        console.error(error);
+        return res(500)
+    }
+})
+
 app.get('/users/:id', cookieJwtAuth, async (req, res) => {
     try {
 
@@ -556,10 +576,18 @@ app.post('/login/', cookieJwtAuth, async (req, res) => {
 });
 
 app.get('/auth/', cookieJwtAuth, async (req, res) => {
-    if (!req.user) {
-        return res.status(401).send("Invalid Request, please log in");
+    try {
+
+        if (!req.user) {
+            return res.status(401).send("Invalid Request, please log in");
+        }
+        console.log(req.user.permissions)
+        return res.status(200).send({ perms: req.user.permissions })
     }
-    return res.status(200).send("Valid Request")
+    catch (error) {
+        console.error(error)
+        return res.status(500).send("An Error Occured");
+    }
 })
 
 const PORT = process.env.PORT || 3000;
