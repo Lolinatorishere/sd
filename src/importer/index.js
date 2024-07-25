@@ -5,18 +5,23 @@ const axios = require("axios")
 const knex = require('./knex')
 const uuid = require("uuid")
 
-async function fetchAllData(apiUrl) {
+async function fetchAllData(apiUrl, id) {
     let offset = 0;
-    const limit = 1000; // Define the limit of records to fetch per request
-    let url = `${apiUrl}?$order=id&$limit=${limit}&$offset=${offset}`;
+    if (id !== null) {
+        offset = id
+    }
+    const limit = 10000; // Define the limit of records to fetch per request
 
+    console.log(offset)
     try {
         while (true) {
             let response = await axios.get(`${apiUrl}?$order=id&$limit=${limit}&$offset=${offset}`)
             if (response.data.length === 0) {
                 break
             } else {
-                offset += 1000;
+                if (id != 0) {
+                    offset += 10000;
+                }
             }
             for (let i = 0; i < response.data.length; i++) {
                 let crime = response.data[i]
@@ -30,7 +35,6 @@ async function fetchAllData(apiUrl) {
                 console.log("data_length " + district.length)
                 console.log(i)
                 console.log("crime id" + parseInt(crime.id))
-                console.log(response.data[i])
                 if (district.length === 0) {
                     await knex('districts')
                         .insert([{ district: crime.district }])
@@ -58,26 +62,6 @@ async function fetchAllData(apiUrl) {
                 if (crime.year == undefined) { crime.year = 0 }
                 if (crime.latitude == undefined) { crime.latitude = 0 }
                 if (crime.longitude == undefined) { crime.longitude = 0 }
-                //console.log(crime.case_number)
-                //console.log(crime.date)
-                //console.log(crime.block)
-                //console.log(crime.iucr)
-                //console.log(crime.primary_type)
-                //console.log(crime.description)
-                //console.log(crime.location_description)
-                //console.log(crime.arrest)
-                //console.log(crime.domestic)
-                //console.log(crime.beat)
-                //console.log(uuid.parse(district[0].id))
-                //console.log(crime.ward)
-                //console.log(crime.community_area)
-                //console.log(crime.fbi_code)
-                //console.log(parseInt(crime.x_coordinate))
-                //console.log(parseInt(crime.y_coordinate))
-                //console.log(parseInt(crime.year))
-                //console.log(crime.updated_on)
-                //console.log(parseFloat(crime.latitude))
-                //console.log(parseFloat(crime.longitude))
                 await knex('crimes')
                     .insert([{
                         api_id: parseInt(crime.id),
@@ -155,14 +139,19 @@ const JSONObserver = {
 
 // Application Module
 const ImporterApplication = {
-    start: function () {
+    start: async function () {
         HelloWorld.say();
         JSONObserver.list();
         let apiUrl = "https://data.cityofchicago.org/resource/ijzp-q8t2.json"
-        fetchAllData(apiUrl);
+        let id = await knex('crimes')
+            .max("api_id")
+            .then(function (response) { return response })
+
+        fetchAllData(apiUrl, id[0].max);
         // Start a minimal supervision tree (Simulated as there's no real equivalent in Node.js)
         console.log("Application started");
     }
+
 };
 
 // Start the application

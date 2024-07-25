@@ -103,8 +103,13 @@ async function validateCredentials(username, password) {
 
 //check_root();
 
-app.get('/user/:id', async (req, res) => {
+app.get('/users/:id', cookieJwtAuth, async (req, res) => {
     try {
+
+        if (!req.user) {
+            return res.status(401).send("Invalid Request, please log in");
+        }
+
         let { id } = req.params;
         let user = await knex("users")
             .select("username")
@@ -125,7 +130,7 @@ app.get('/user/:id', async (req, res) => {
     }
 });
 
-app.post('/user/', cookieJwtAuth, async (req, res) => {
+app.post('/users/', cookieJwtAuth, async (req, res) => {
     try {
         //let re = /[0-9A-Fa-f]{64}/g;
         if (res.cookie) {
@@ -210,7 +215,7 @@ app.post('/user/', cookieJwtAuth, async (req, res) => {
     }
 })
 
-app.put('/user/:id', cookieJwtAuth, async (req, res) => {
+app.put('/users/:id', cookieJwtAuth, async (req, res) => {
     try {
 
         let { id } = req.params;
@@ -422,7 +427,7 @@ app.put('/user/:id', cookieJwtAuth, async (req, res) => {
     }
 })
 
-app.delete('/user/:id', cookieJwtAuth, async (req, res) => {
+app.delete('/users/:id', cookieJwtAuth, async (req, res) => {
     try {
 
         let { id } = req.params;
@@ -550,6 +555,12 @@ app.post('/login/', cookieJwtAuth, async (req, res) => {
     }
 });
 
+app.get('/auth/', cookieJwtAuth, async (req, res) => {
+    if (!req.user) {
+        return res.status(401).send("Invalid Request, please log in");
+    }
+    return res.status(200).send("Valid Request")
+})
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
