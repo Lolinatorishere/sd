@@ -40,7 +40,7 @@ export class DistrictsController {
         @Param('crimeId') crimeId: string,
         @Body() updateCrimeDto: UpdateCrimeDto
     ) {
-        return this.districtService.updateCrime(districtId, crimeId, updateCrimeDto);
+        return this.districtService.updateCrime(crimeId, districtId, updateCrimeDto);
     }
 
     @Delete(':districtId/crimes/:crimeId')

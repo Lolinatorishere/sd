@@ -61,7 +61,6 @@ export class DistrictsService {
             return await this.prisma.crime.update({
                 where: {
                     id: crimeId,
-                    district_id: districtId, // Ensure the update is for the correct crime within the correct district
                 },
                 data: data,
             });
@@ -76,7 +75,6 @@ export class DistrictsService {
             return await this.prisma.crime.delete({
                 where: {
                     id: crimeId,
-                    district_id: districtId,
                 },
             });
         } catch (error) {
